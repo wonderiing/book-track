@@ -19,19 +19,19 @@ export class Book {
     authors: string[];
 
     @Column({ type: 'text', name: 'cover_url', nullable: true })
-    coverUrl: string;
+    coverUrl: string | null;
 
-    @Column('text')
-    synopsis: string;
+    @Column({ type: 'text', nullable: true })
+    synopsis: string | null;
 
-    @Column({ type: 'int', name: 'publication_year' })
-    publicationYear: number;
+    @Column({ type: 'text', name: 'publication_date' })
+    publicationDate: string;
 
     @Column({ type: 'text', name: 'isbn_10', nullable: true })
-    isbn10: string;
+    isbn10: string | null;
 
     @Column({ type: 'text', name: 'isbn_13', nullable: true })
-    isbn13: string;
+    isbn13: string | null;
 
     @Column({ type: 'int', name: 'page_count' })
     pageCount: number;

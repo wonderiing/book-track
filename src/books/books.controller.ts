@@ -8,7 +8,7 @@ export class BooksController {
 
   @Get("search/:query")
   searchBooks(@Param("query") query: string, @Query("maxResults") maxResults: number, @Query("startIndex") startIndex: number) {
-    return this.booksService.searchBooks(query, maxResults, startIndex);
+    return this.booksService.findAllByName(query, maxResults, startIndex);
   }
 
 }
