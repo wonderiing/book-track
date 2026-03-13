@@ -67,9 +67,16 @@ export class BooksService {
 
   async findOneById(id: string): Promise<BookSource> {
 
-    const book = await this.bookRepository.findOne({where: { externalId: id}});
-    if (book) return book; 
+    const cacheKey = `book:${id}`;
+    const cached = await this.cacheManager.get<BookSource>(cacheKey);
+    if (cached) return cached;
 
+    const book = await this.bookRepository.findOne({where: { externalId: id}});
+    if (book) {
+      await this.cacheManager.set(cacheKey, book);
+      return book;
+    } 
+    
     const url = `${this.BASE_URL}/${id}?key=${this.API_KEY}`;
     const response = await fetch(url);
 
@@ -84,6 +91,8 @@ export class BooksService {
     }
     
     const mappedBook = mapGoogleBookToBook(data);
+
+    await this.cacheManager.set(cacheKey, mappedBook);
     return mappedBook;
 
   }
