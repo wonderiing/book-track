@@ -11,4 +11,15 @@ export class BooksController {
     return this.booksService.findAllByName(query, maxResults, startIndex);
   }
 
+  @Get("search/id/:id")
+  searchBookById(@Param("id") id : string) {
+    return this.booksService.findOneById(id);
+  }
+
+  @Post(":id")
+  addBook(@Param("id") id: string) {
+    return this.booksService.create(id);
+
+  }
+
 }

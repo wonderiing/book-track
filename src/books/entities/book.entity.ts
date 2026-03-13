@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Book {
@@ -6,6 +6,7 @@ export class Book {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    @Index()
     @Column({ unique: true, name: 'external_id', type: 'text' })
     externalId: string;
 

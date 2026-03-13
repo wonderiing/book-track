@@ -1,4 +1,3 @@
-// dto/book-source.interface.ts
 export interface BookSource {
     externalId: string;
     externalSource: 'google' | 'openlibrary' | string;
