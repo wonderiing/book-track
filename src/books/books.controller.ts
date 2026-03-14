@@ -1,25 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Query, ParseUUIDPipe } from '@nestjs/common';
 import { BooksService } from './books.service';
+import { UUID } from 'typeorm/driver/mongodb/bson.typings';
+import { of } from 'rxjs';
 
 @Controller('books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) { }
 
 
-  @Get("search/:query")
+  @Get("search/google/:query")
   searchBooks(@Param("query") query: string, @Query("maxResults") maxResults: number, @Query("startIndex") startIndex: number) {
     return this.booksService.findAllByName(query, maxResults, startIndex);
   }
 
-  @Get("search/id/:id")
-  searchBookById(@Param("id") id : string) {
-    return this.booksService.findOneById(id);
+  @Get("search/google/:externalId")
+  searchBookById(@Param("externalId") externalId: string) {
+    return this.booksService.findOneByExternalId(externalId);
   }
 
   @Post(":id")
   addBook(@Param("id") id: string) {
     return this.booksService.create(id);
+  }
 
+  @Get(":uuid")
+  getBook(@Param("uuid", ParseUUIDPipe) uuid: string) {
+    return this.booksService.findOneById(uuid);
+  }
+
+  @Get()
+  getAllBooks(@Query("limit") limit: number, @Query("offset") offset: number) {
+    return this.booksService.findAll(limit, offset);
   }
 
 }
