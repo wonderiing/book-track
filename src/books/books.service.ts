@@ -6,6 +6,7 @@ import { Book } from './entities/book.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GoogleBooksProvider } from './providers/google-books.provider';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 @Injectable()
 export class BooksService {
@@ -115,7 +116,10 @@ export class BooksService {
   }
 
   // Pendiente de crear el DTO y cambiar el tipo de retorno.
-  async findAll(offset: number, limit: number): Promise<Book[]> {
+  async findAll(paginationDto: PaginationDto): Promise<Book[]> {
+    
+    const {limit = 10, offset = 0} = paginationDto;
+
     const books = await this.bookRepository.find({
       skip: offset,
       take: limit,

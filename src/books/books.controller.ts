@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Query, ParseUUIDPipe } from 
 import { BooksService } from './books.service';
 import { UUID } from 'typeorm/driver/mongodb/bson.typings';
 import { of } from 'rxjs';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 @Controller('books')
 export class BooksController {
@@ -29,8 +30,8 @@ export class BooksController {
   }
 
   @Get()
-  getAllBooks(@Query("limit") limit: number, @Query("offset") offset: number) {
-    return this.booksService.findAll(limit, offset);
+  getAllBooks(@Query() paginationDto: PaginationDto) {
+    return this.booksService.findAll(paginationDto);
   }
 
 }
