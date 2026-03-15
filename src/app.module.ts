@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { BooksModule } from './books/books.module';
+import { AuthModule } from './auth/auth.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -27,6 +29,10 @@ import { BooksModule } from './books/books.module';
     }),
 
     BooksModule,
+
+    AuthModule,
+
+    MailModule,
 
 
 
