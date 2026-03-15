@@ -2,27 +2,32 @@ import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { MailController } from './mail.controller';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { config } from 'process';
 
 @Module({
   controllers: [MailController],
   providers: [MailService],
   imports: [
 
-    MailerModule.forRoot({
-      transport: {
-        host: process.env.MAIL_HOST,
-        port: Number(process.env.MAIL_PORT) || 587,
-        secure: false,
-        auth: {
-          user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASS
+    MailerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        transport: {
+          host: config.get<string>('MAIL_HOST'),
+          port: config.get<number>('MAIL_PORT'),
+          secure: true,
+          auth: {
+            user: config.get<string>('MAIL_USER'),
+            pass: config.get<string>('MAIL_PASS')
+          },
         },
-      },
-      defaults: {
-        from: `"BookTrack" <${process.env.MAIL_FROM}>`
-      }
-  }),
+        defaults: {
+          from: `"BookTrack" <${config.get<string>('MAIL_FROM')}>`,
+        },
+      }),
+      
+    }),
   ],
 
   exports: [MailerModule, MailService]
